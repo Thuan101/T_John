@@ -3,112 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T JOHN AI | ULTIMATE OS</title>
+    <title>T JOHN AI | CORE OS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { --neon: #00f2ff; --bg: #050505; }
+        :root { --neon: #00f2ff; }
         body { 
             background: url('https://raw.githubusercontent.com/Thuan101/T-John-Ai/main/1000181678.jpg') no-repeat center center fixed; 
             background-size: cover;
             color: var(--neon); 
             font-family: 'Courier New', monospace; 
-            overflow: hidden; 
-            height: 100vh; 
-            margin: 0; 
+            overflow: hidden; height: 100vh; margin: 0; 
         }
-        .neon-glow { text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon); }
-        .neon-border { border: 1px solid var(--neon); box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); }
-        .glass { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(0, 242, 255, 0.2); }
+        .neon-glow { text-shadow: 0 0 15px var(--neon); }
+        .glass { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px); border: 1px solid rgba(0, 242, 255, 0.3); }
         
-        /* PHÒNG ĐIỀU HÀNH V5 - TỐI ƯU KHÔNG GIAN */
-        #admin-vault { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; align-items: center; justify-content: center; padding: 15px; }
-        .vault-box { width: 100%; max-width: 420px; padding: 1.5rem; border-radius: 20px; }
-
-        .action-bar { display: flex; gap: 6px; justify-content: center; margin-bottom: 10px; overflow-x: auto; padding: 5px; }
-        .btn-tool { 
-            background: rgba(0, 242, 255, 0.15); 
-            border: 1px solid var(--neon); 
-            color: var(--neon); 
-            font-size: 10px; 
-            font-weight: bold;
-            padding: 5px 10px; 
-            border-radius: 5px;
-            text-transform: uppercase;
-            white-space: nowrap;
+        /* PHÒNG ĐIỀU HÀNH V6 - FIX CỨNG GIAO DIỆN */
+        #admin-vault { 
+            display: none; position: fixed; inset: 0; 
+            background: rgba(0,0,0,0.95); z-index: 9999; 
+            align-items: center; justify-content: center; padding: 10px; 
         }
-        #sandbox-area { display: none; position: fixed; inset: 5%; z-index: 5000; background: white; border-radius: 12px; overflow: hidden; }
-        iframe { width: 100%; height: 100%; border: none; }
+        .vault-box { width: 100%; max-width: 450px; padding: 25px; border-radius: 30px; border: 2px solid var(--neon); }
+
+        .btn-tool { 
+            background: rgba(0, 242, 255, 0.1); border: 1px solid var(--neon); 
+            color: var(--neon); font-size: 10px; padding: 6px 12px; border-radius: 4px;
+        }
     </style>
 </head>
 <body class="flex flex-col">
 
-    <header class="flex flex-col items-center justify-center py-5">
-        <h1 class="text-4xl md:text-6xl font-black italic tracking-tighter neon-glow uppercase">T JOHN AI</h1>
-        <div class="text-[10px] tracking-[0.4em] text-cyan-300 font-bold opacity-90">NHÀ SÁNG LẬP: T THUẬN</div>
+    <header class="text-center py-6">
+        <h1 class="text-5xl font-black italic neon-glow uppercase">T JOHN AI</h1>
+        <div class="text-[10px] tracking-[0.3em] text-cyan-400 font-bold">NHÀ SÁNG LẬP: T THUẬN</div>
     </header>
 
     <main class="flex-grow px-4 pb-48 overflow-hidden">
-        <div id="terminal" class="h-full glass p-4 rounded-xl overflow-y-auto text-[11px] leading-relaxed neon-border">
+        <div id="terminal" class="h-full glass p-4 rounded-2xl overflow-y-auto text-[12px] leading-relaxed shadow-2xl">
             <div id="logs" class="space-y-2">
-                <div class="text-white/40">[HỆ THỐNG]: Đã khôi phục Jina Reader API...</div>
-                <div class="text-cyan-400 font-bold">[T JOHN]: Đang trực lệnh, thưa Nhà sáng lập.</div>
+                <div class="text-white/40">[HỆ THỐNG]: Khởi động Core V6...</div>
+                <div class="text-cyan-400">[T JOHN]: Đã sẵn sàng. Hãy nạp Key trong Vault (🔐) nếu bị lỗi.</div>
             </div>
         </div>
     </main>
 
     <section class="fixed bottom-0 left-0 w-full glass p-4 border-t border-cyan-500/30 z-20">
-        <div class="action-bar">
-            <button onclick="copyCode()" class="btn-tool">Copy Code</button>
-            <button onclick="downloadApp()" class="btn-tool">Tải File</button>
-            <label class="btn-tool cursor-pointer">Nạp File <input type="file" class="hidden" onchange="handleFile(event)"></label>
-            <button onclick="abort()" id="stopBtn" class="hidden btn-tool border-red-500 text-red-500">Dừng</button>
+        <div class="flex gap-2 justify-center mb-4">
+            <button onclick="copyCode()" class="btn-tool">COPY CODE</button>
+            <button onclick="downloadApp()" class="btn-tool">TẢI FILE</button>
+            <label class="btn-tool cursor-pointer">NẠP FILE <input type="file" class="hidden" onchange="handleFile(event)"></label>
         </div>
         
         <div class="flex gap-2 max-w-4xl mx-auto">
-            <input type="text" id="userInput" placeholder="Nhập lệnh điều hành..." 
-                class="flex-grow bg-black/60 border border-cyan-900 p-3 rounded-xl text-white outline-none focus:border-cyan-400 text-sm">
-            <button onclick="execute()" class="bg-cyan-500 text-black px-5 rounded-xl font-bold">GỬI</button>
-            <button onclick="toggleVault()" class="px-3 rounded-xl border border-cyan-900 bg-black/40">🔐</button>
+            <input type="text" id="userInput" placeholder="Nhập lệnh..." 
+                class="flex-grow bg-black/60 border border-cyan-900 p-4 rounded-2xl text-white outline-none focus:border-cyan-400">
+            <button onclick="execute()" class="bg-cyan-500 text-black px-6 rounded-2xl font-black shadow-lg">GỬI</button>
+            <button onclick="toggleVault()" class="px-4 rounded-2xl border border-cyan-900 bg-black/40 text-xl">🔐</button>
         </div>
     </section>
 
     <div id="admin-vault">
-        <div class="vault-box neon-border glass">
-            <h2 class="text-xl font-bold mb-4 italic neon-glow uppercase text-center">Phòng Điều Hành</h2>
-            <input type="password" id="vaultPass" placeholder="MẬT MÃ ADMIN..." class="w-full bg-zinc-900 border border-cyan-900 p-3 rounded-xl mb-4 text-white text-center outline-none">
+        <div class="vault-box glass shadow-2xl">
+            <h2 class="text-2xl font-bold mb-6 italic neon-glow text-center uppercase">Phòng Điều Hành</h2>
+            <input type="password" id="vaultPass" placeholder="MẬT MÃ ADMIN..." 
+                class="w-full bg-zinc-900 border border-cyan-900 p-4 rounded-xl mb-6 text-white text-center outline-none">
             
-            <div id="vault-content" class="hidden space-y-3 text-left">
+            <div id="vault-content" class="hidden space-y-4">
                 <div>
-                    <label class="text-[9px] text-cyan-500 font-bold uppercase ml-1">1. Gemini API Key</label>
-                    <input type="password" id="key-gemini" class="w-full bg-zinc-800 p-2 rounded text-xs text-white border border-zinc-700">
+                    <label class="text-[10px] text-cyan-500 font-bold ml-1 uppercase">1. Gemini API Key</label>
+                    <input type="password" id="key-gemini" class="w-full bg-zinc-800 p-3 rounded-xl text-white border border-zinc-700">
                 </div>
                 <div>
-                    <label class="text-[9px] text-cyan-500 font-bold uppercase ml-1">2. GitHub Token (ghp_...)</label>
-                    <input type="password" id="key-github" class="w-full bg-zinc-800 p-2 rounded text-xs text-white border border-zinc-700">
+                    <label class="text-[10px] text-cyan-500 font-bold ml-1 uppercase">2. GitHub Token</label>
+                    <input type="password" id="key-github" class="w-full bg-zinc-800 p-3 rounded-xl text-white border border-zinc-700">
                 </div>
                 <div>
-                    <label class="text-[9px] text-yellow-500 font-bold uppercase ml-1">3. Jina Reader API Key</label>
-                    <input type="password" id="key-jina" class="w-full bg-zinc-800 p-2 rounded text-xs text-white border border-zinc-700">
+                    <label class="text-[10px] text-yellow-500 font-bold ml-1 uppercase">3. Jina Reader Key</label>
+                    <input type="password" id="key-jina" class="w-full bg-zinc-800 p-3 rounded-xl text-white border border-zinc-700">
                 </div>
-                <button onclick="saveVault()" class="w-full bg-cyan-600 py-3 rounded-xl font-black text-black uppercase shadow-lg mt-2">LƯU CẤU HÌNH HẠT NHÂN</button>
+                <button onclick="saveVault()" class="w-full bg-cyan-600 py-4 rounded-xl font-black text-black uppercase mt-4">KÍCH HOẠT HỆ THỐNG</button>
             </div>
-            <button onclick="toggleVault()" class="w-full mt-4 text-[10px] opacity-50 underline uppercase">Thoát</button>
+            <button onclick="toggleVault()" class="w-full mt-6 text-[10px] opacity-40 uppercase">Hủy bỏ</button>
         </div>
-    </div>
-
-    <div id="sandbox-area" class="neon-border">
-        <div class="bg-zinc-900 p-2 flex justify-between items-center text-white"><span class="text-[10px] ml-2">PREVIEW</span><button onclick="closeSandbox()" class="text-red-500 font-bold px-2">X</button></div>
-        <iframe id="sandbox-iframe"></iframe>
     </div>
 
     <script>
         const ADMIN_HASH = "ADMIN_T.JOHN.AI_Q.Thuan:7329000";
         let lastCode = "", controller = null;
-
-        const vault = {
-            encode: (s) => btoa(encodeURIComponent(s)),
-            decode: (s) => { try { return decodeURIComponent(atob(s)); } catch(e) { return s; } }
-        };
 
         function toggleVault() {
             const v = document.getElementById('admin-vault');
@@ -123,36 +104,46 @@
         });
 
         function saveVault() {
-            localStorage.setItem('_tj_g', vault.encode(document.getElementById('key-gemini').value));
-            localStorage.setItem('_tj_h', vault.encode(document.getElementById('key-github').value));
-            localStorage.setItem('_tj_j', vault.encode(document.getElementById('key-jina').value));
-            alert("Đã lưu trữ mã hóa toàn bộ API Keys!");
-            toggleVault();
+            // Lưu trực tiếp để tránh lỗi mã hóa khi nạp lại
+            localStorage.setItem('gemini_key', document.getElementById('key-gemini').value);
+            localStorage.setItem('github_key', document.getElementById('key-github').value);
+            localStorage.setItem('jina_key', document.getElementById('key-jina').value);
+            alert("HỆ THỐNG: Đã ghi nhớ chìa khóa!");
+            location.reload(); // Tải lại trang để áp dụng key mới
         }
 
-        async function askAI(prompt, fileData = null) {
-            const k = vault.decode(localStorage.getItem('_tj_g'));
-            if(!k) return log("LỖI: Chưa nạp API Key!", "error");
+        async function askAI(prompt) {
+            const k = localStorage.getItem('gemini_key');
+            if(!k) return log("LỖI: Bạn chưa nạp Gemini Key trong Vault 🔐!", "error");
+
             controller = new AbortController();
-            document.getElementById('stopBtn').classList.remove('hidden');
+            log("T John đang xử lý...", "info");
+
             try {
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${k}`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     signal: controller.signal,
-                    body: JSON.stringify({ contents: [{ parts: [{ text: `Founder: T Thuận. Yêu cầu: ${prompt}` }]}] })
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Founder: T Thuận. Yêu cầu: ${prompt}` }]}]
+                    })
                 });
+
                 const data = await response.json();
+                
+                // FIX LỖI "Undefined 0" bằng cách kiểm tra dữ liệu kỹ hơn
+                if (!data.candidates || !data.candidates[0]) {
+                    throw new Error("API Key không hợp lệ hoặc hết hạn!");
+                }
+
                 const text = data.candidates[0].content.parts[0].text;
                 const match = text.match(/```html([\s\S]*?)```/);
-                if(match) {
-                    lastCode = match[1];
-                    document.getElementById('sandbox-area').style.display = 'block';
-                    document.getElementById('sandbox-iframe').srcdoc = lastCode;
-                }
+                if(match) lastCode = match[1];
+                
                 log(text.replace(/```[\s\S]*?```/g, "[MÃ NGUỒN]"), "ai");
-            } catch (e) { if(e.name !== 'AbortError') log("LỖI: " + e.message, "error"); }
-            document.getElementById('stopBtn').classList.add('hidden');
+            } catch (e) {
+                log("LỖI HỆ THỐNG: " + e.message, "error");
+            }
         }
 
         function execute() {
@@ -166,8 +157,8 @@
         function log(m, t) {
             const logs = document.getElementById('logs');
             const d = document.createElement('div');
-            const c = { success: 'text-green-400', ai: 'text-white italic', error: 'text-red-500' };
-            d.className = `${c[t] || 'text-cyan-400'} border-l-2 border-current pl-2 py-1`;
+            const c = { success: 'text-green-400', error: 'text-red-500', ai: 'text-white italic' };
+            d.className = `${c[t] || 'text-cyan-400'} border-l-2 border-current pl-3 py-1`;
             d.innerHTML = `> ${m}`;
             logs.appendChild(d);
             document.getElementById('terminal').scrollTop = document.getElementById('terminal').scrollHeight;
@@ -175,9 +166,7 @@
 
         function copyCode() { if(lastCode) { navigator.clipboard.writeText(lastCode); alert("Đã copy!"); } }
         function downloadApp() { if(lastCode) { const blob = new Blob([lastCode], {type: 'text/html'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `T-JOHN-APP.html`; a.click(); } }
-        function handleFile(e) { const f = e.target.files[0]; const r = new FileReader(); r.onload = (ev) => askAI(`Phân tích file ${f.name}`, ev.target.result.split(',')[1]); r.readAsDataURL(f); }
-        function abort() { if(controller) controller.abort(); }
-        function closeSandbox() { document.getElementById('sandbox-area').style.display = 'none'; }
+        function handleFile(e) { log("Đã nhận file: " + e.target.files[0].name, "info"); }
     </script>
 </body>
 </html>
