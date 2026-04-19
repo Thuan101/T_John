@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T JOHN AI | CORE V12</title>
+    <title>T JOHN AI | CORE V12.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="importmap">
       {
@@ -30,15 +30,15 @@
 <body>
 
     <header class="text-center py-4 shrink-0">
-        <h1 class="text-3xl font-black italic neon-glow uppercase">T JOHN V12</h1>
+        <h1 class="text-3xl font-black italic neon-glow uppercase">T JOHN V12.1</h1>
         <div class="text-[9px] tracking-[0.4em] text-cyan-300 font-bold uppercase">Hệ Thống Tự Khắc Phục Lỗi | Founder: T Thuận</div>
     </header>
 
     <main class="flex-grow overflow-hidden px-4">
         <div id="terminal" class="h-full overflow-y-auto p-2 custom-scroll">
             <div id="logs">
-                <div class="log-entry text-white/40">[HỆ THỐNG]: Đã kích hoạt V12 với cơ chế Multi-Model.</div>
-                <div class="log-entry text-cyan-400 font-bold">[T JOHN]: Sẵn sàng chiến đấu. Nhà sáng lập hãy kiểm tra 3 Key trong ⚙️.</div>
+                <div class="log-entry text-white/40">[HỆ THỐNG]: Đã kích hoạt V12.1 - Fix v1beta Error.</div>
+                <div class="log-entry text-cyan-400 font-bold">[T JOHN]: Sẵn sàng. Nhà sáng lập hãy kiểm tra 3 Key trong ⚙️.</div>
             </div>
         </div>
     </main>
@@ -112,20 +112,24 @@
             const apiKey = localStorage.getItem('gemini_key');
             if(!apiKey) return window.log("LỖI: Thiếu Gemini Key trong cài đặt ⚙️!", "error");
 
-            window.log("Đang dò tìm cổng kết nối phù hợp...", "info");
+            window.log("Đang thiết lập kênh truyền tin bảo mật...", "info");
 
-            // DANH SÁCH CÁC MODEL SẼ THỬ LẦN LƯỢT
-            const modelNames = ["gemini-1.5-flash-latest", "gemini-1.5-flash", "gemini-1.5-pro"];
+            // ƯU TIÊN GỌI QUA PHIÊN BẢN V1 ỔN ĐỊNH
+            const modelNames = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"];
             let success = false;
 
             for (let name of modelNames) {
                 if (success) break;
                 try {
-                    window.log(`Đang thử model: ${name}...`, "info");
+                    window.log(`Đang kết nối cổng: ${name}...`, "info");
                     const genAI = new GoogleGenerativeAI(apiKey);
-                    const model = genAI.getGenerativeModel({ model: name });
+                    
+                    // FIX LỖI 404: Ép buộc sử dụng phiên bản API v1 thay vì v1beta
+                    const model = genAI.getGenerativeModel({ 
+                        model: name,
+                    }, { apiVersion: 'v1' }); 
 
-                    const result = await model.generateContent(`Founder: T Thuận. Bạn là T John AI. Yêu cầu: ${prompt}`);
+                    const result = await model.generateContent(`Founder: T Thuận. Bạn là T John AI. Luôn trả về code HTML/CSS/JS nằm trong block mã. Yêu cầu: ${prompt}`);
                     const response = await result.response;
                     const text = response.text();
 
@@ -133,11 +137,12 @@
                     if(match) window.lastCode = match[1];
 
                     window.log(text.replace(/```[\s\S]*?```/g, "[MÃ NGUỒN ĐÃ TRÍCH XUẤT]"), "ai");
-                    success = true; // Nếu chạy đến đây không lỗi thì đánh dấu thành công
+                    success = true; 
                 } catch (err) {
-                    window.log(`Cổng ${name} thất bại.`, "error");
+                    window.log(`Cổng ${name} chưa phản hồi. Đang chuyển...`, "error");
                     if (name === modelNames[modelNames.length - 1]) {
-                        window.log("SỰ CỐ CUỐI CÙNG: " + err.message, "error");
+                        window.log("SỰ CỐ HỆ THỐNG: " + err.message, "error");
+                        window.log("Gợi ý: Hãy thử đổi sang 4G hoặc kiểm tra lại Key.", "info");
                     }
                 }
             }
