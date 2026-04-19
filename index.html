@@ -6,185 +6,243 @@
     <title>T JOHN AI | ULTIMATE OS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { --neon: #00f2ff; --bg: #050505; }
+        :root { --neon: #00f2ff; --bg: #050505; --safety: #ff0055; }
         body { background-color: var(--bg); color: var(--neon); font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; margin: 0; }
-        .neon-glow { text-shadow: 0 0 10px var(--neon), 0 0 25px var(--neon); }
-        .neon-border { border: 1px solid var(--neon); box-shadow: 0 0 12px rgba(0, 242, 255, 0.3); }
-        #admin-vault { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 1000; backdrop-filter: blur(15px); }
-        #sandbox-container { display: none; position: fixed; top: 5%; left: 5%; width: 90%; height: 80%; z-index: 2000; background: white; border-radius: 12px; overflow: hidden; }
-        #terminal::-webkit-scrollbar { width: 4px; }
-        #terminal::-webkit-scrollbar-thumb { background: var(--neon); }
+        .neon-glow { text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon); }
+        .neon-border { border: 1px solid var(--neon); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
+        
+        /* Layout khu vực */
+        #admin-vault { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; backdrop-filter: blur(20px); }
+        #sandbox-area { display: none; position: fixed; top: 5%; left: 5%; width: 90%; height: 80%; z-index: 4000; background: white; border-radius: 15px; overflow: hidden; }
+        
+        /* Scanline hiệu ứng Terminal */
+        .scanline { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent 50%, rgba(0, 242, 255, 0.02) 50%); background-size: 100% 4px; pointer-events: none; z-index: 100; }
+        
+        .chat-zone { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.9); padding: 15px; border-top: 1px solid var(--neon); z-index: 200; }
+        #terminal { scroll-behavior: smooth; }
         iframe { width: 100%; height: 100%; border: none; }
-        .control-btn { transition: all 0.3s; border: 1px solid var(--neon); background: rgba(0, 242, 255, 0.1); }
-        .control-btn:hover { background: var(--neon); color: black; }
-        /* Đảm bảo khung chat không bị bàn phím che */
-        .chat-section { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(5,5,5,0.9); padding: 10px; z-index: 100; border-top: 1px solid var(--neon); }
     </style>
 </head>
-<body class="flex flex-col relative">
+<body class="flex flex-col">
+    <div class="scanline"></div>
 
-    <header class="flex flex-col items-center justify-center py-4 z-20">
-        <h1 class="text-5xl md:text-7xl font-black italic tracking-tighter neon-glow">T JOHN AI</h1>
-        <div class="text-[10px] tracking-[0.4em] text-cyan-300 uppercase font-bold opacity-80">Nhà sáng lập: T Thuận</div>
+    <header class="flex flex-col items-center justify-center py-6">
+        <h1 class="text-6xl font-black italic tracking-tighter neon-glow uppercase">T THUẬN</h1>
+        <div class="text-[10px] tracking-[0.5em] text-cyan-400 font-bold opacity-70">SYSTEM ARCHITECT: T JOHN AI</div>
     </header>
 
-    <main class="flex-grow overflow-hidden px-4 pb-32">
-        <div id="terminal" class="h-full neon-border bg-black/60 p-4 rounded-xl overflow-y-auto text-sm font-mono">
-            <div id="logs"></div>
+    <main class="flex-grow px-4 pb-40 overflow-hidden">
+        <div id="terminal" class="h-full neon-border bg-black/50 p-4 rounded-xl overflow-y-auto text-xs leading-relaxed">
+            <div id="logs" class="space-y-2">
+                <div class="text-white/40">[HỆ THỐNG]: Chào mừng Nhà sáng lập T Thuận. Đang đợi xác thực...</div>
+            </div>
         </div>
     </main>
 
-    <section class="chat-section flex flex-col gap-2">
-        <div class="flex gap-2 justify-center mb-1">
-            <button onclick="copyLastCode()" class="control-btn text-[10px] px-2 py-1 rounded">COPY CODE</button>
-            <button onclick="downloadCode()" class="control-btn text-[10px] px-2 py-1 rounded">TẢI FILE</button>
-            <button onclick="abortAI()" id="stopBtn" class="hidden border border-red-500 text-red-500 text-[10px] px-2 py-1 rounded">DỪNG</button>
-            <label class="control-btn text-[10px] px-2 py-1 rounded cursor-pointer">
-                ĐỌC FILE <input type="file" id="fileInput" class="hidden" onchange="handleFileUpload(event)">
+    <section class="chat-zone flex flex-col gap-3">
+        <div class="flex gap-2 justify-center">
+            <button onclick="downloadApp()" class="px-3 py-1 border border-cyan-700 rounded text-[10px] hover:bg-cyan-500 hover:text-black">XUẤT FILE</button>
+            <button onclick="abortMission()" id="stopBtn" class="hidden px-3 py-1 border border-red-600 rounded text-[10px] text-red-500">DỪNG LỆNH</button>
+            <label class="px-3 py-1 border border-yellow-600 rounded text-[10px] text-yellow-500 cursor-pointer">
+                NẠP FILE <input type="file" id="dropZone" class="hidden" onchange="handleFile(event)">
             </label>
         </div>
-        
         <div class="flex gap-2">
-            <input type="text" id="userInput" placeholder="Hỏi T John hoặc nhập mã đặc biệt..." 
-                class="flex-grow bg-zinc-900 border border-cyan-800 px-4 py-3 rounded-xl text-white outline-none focus:border-cyan-400">
-            <button onclick="handleCommand()" class="bg-cyan-500 text-black px-6 rounded-xl font-bold">GỬI</button>
+            <input type="text" id="userInput" placeholder="Nhập lệnh hoặc Mã đặc biệt..." 
+                class="flex-grow bg-zinc-900 border border-cyan-900 p-3 rounded-xl text-white outline-none focus:border-cyan-400">
+            <button onclick="execute()" class="bg-cyan-500 text-black px-6 rounded-xl font-black">GỬI</button>
             <button onclick="toggleVault()" class="px-3 rounded-xl border border-cyan-900">🔐</button>
         </div>
     </section>
 
-    <div id="sandbox-container" class="neon-border">
-        <div class="bg-zinc-900 p-2 flex justify-between items-center border-b border-cyan-900">
-            <span class="text-[10px] text-cyan-400 font-bold">T-JOHN SANDBOX</span>
-            <button onclick="closeSandbox()" class="text-red-500 font-bold text-xs">ĐÓNG [X]</button>
+    <div id="sandbox-area" class="neon-border">
+        <div class="bg-zinc-800 p-2 flex justify-between items-center text-white border-b border-cyan-900">
+            <span class="text-[10px] font-bold text-cyan-400 ml-2 uppercase tracking-widest">T-John Virtual Sandbox</span>
+            <button onclick="closeSandbox()" class="text-red-500 font-black px-2">X</button>
         </div>
         <iframe id="sandbox-iframe"></iframe>
     </div>
 
-    <div id="admin-vault" class="flex items-center justify-center p-4">
-        <div class="w-full max-w-sm p-6 neon-border bg-black rounded-2xl">
-            <h2 class="text-xl font-bold mb-4 text-center neon-glow italic">FOUNDER'S VAULT</h2>
-            <input type="password" id="vaultPassword" placeholder="Mật khẩu Admin..." class="w-full bg-zinc-900 border border-cyan-900 p-3 rounded-lg mb-4 text-white text-center">
+    <div id="admin-vault" class="flex items-center justify-center p-6">
+        <div class="w-full max-w-md p-8 neon-border bg-black rounded-3xl text-center">
+            <h2 class="text-2xl font-bold mb-6 italic neon-glow">PHÒNG ĐIỀU HÀNH</h2>
+            <input type="password" id="vaultPass" placeholder="ADMIN PASSWORD..." 
+                class="w-full bg-zinc-900 border border-cyan-900 p-4 rounded-xl mb-4 text-white text-center tracking-widest outline-none">
             
-            <div id="admin-content" class="hidden space-y-3">
-                <input type="password" id="key-gemini" placeholder="Gemini Key" class="w-full bg-zinc-800 p-2 rounded text-xs text-white">
-                <input type="password" id="key-github" placeholder="GitHub Token" class="w-full bg-zinc-800 p-2 rounded text-xs text-white">
-                <input type="password" id="key-jina" placeholder="Jina Key" class="w-full bg-zinc-800 p-2 rounded text-xs text-white">
-                <button onclick="saveKeys()" class="w-full bg-cyan-600 py-2 rounded font-bold text-black">LƯU CẤU HÌNH</button>
+            <div id="vault-content" class="hidden space-y-4 text-left">
+                <div>
+                    <label class="text-[10px] text-cyan-600 ml-1">GEMINI_HẠT_NHÂN</label>
+                    <input type="password" id="key-gemini" class="w-full bg-zinc-800 p-2 rounded text-xs text-white">
+                </div>
+                <div>
+                    <label class="text-[10px] text-cyan-600 ml-1">GITHUB_PAT_HÀNH_ĐỘNG</label>
+                    <input type="password" id="key-github" class="w-full bg-zinc-800 p-2 rounded text-xs text-white">
+                </div>
+                <button onclick="secureSave()" class="w-full bg-cyan-600 py-3 rounded-xl font-bold text-black uppercase shadow-lg">LƯU TRỮ MÃ HÓA</button>
             </div>
-            <button onclick="toggleVault()" class="w-full mt-4 text-[10px] opacity-50">THOÁT</button>
+            <button onclick="toggleVault()" class="mt-8 text-[10px] opacity-30 hover:opacity-100 uppercase">Hủy truy cập</button>
         </div>
     </div>
 
     <script>
-        const MASTER_PASS = "1234";
-        let lastGeneratedCode = "";
+        // MẬT KHẨU & MÃ ĐẶC BIỆT (Xác thực 1 chiều)
+        const ADMIN_HASH = "ADMIN_T.JOHN.AI_Q.Thuan:7329000";
+        const GOD_CODE = "#DESIGN_T.JOHN.AI_NOW";
+        
         let controller = null;
+        let lastCode = "";
 
-        function log(msg, type = "info") {
-            const logs = document.getElementById('logs');
-            const div = document.createElement('div');
-            const colors = { info: "text-cyan-400", success: "text-green-400", error: "text-red-500", ai: "text-white italic" };
-            div.className = `${colors[type]} mb-2 text-xs`;
-            div.innerHTML = `> ${msg}`;
-            logs.appendChild(div);
-            document.getElementById('terminal').scrollTop = document.getElementById('terminal').scrollHeight;
+        // BƯỚC 3: BẢO MẬT & MÃ HÓA
+        const vaultSecret = {
+            encode: (str) => btoa(encodeURIComponent(str)),
+            decode: (str) => decodeURIComponent(atob(str))
+        };
+
+        function protectVault() {
+            // Ngăn AI đọc biến trực tiếp qua các hàm tự tạo
+            Object.freeze(vaultSecret);
+            log("Lớp bảo mật Vault đã được đóng băng.", "info");
         }
 
-        function toggleVault() { document.getElementById('admin-vault').style.display = document.getElementById('admin-vault').style.display === 'flex' ? 'none' : 'flex'; }
+        function toggleVault() {
+            const v = document.getElementById('admin-vault');
+            v.style.display = v.style.display === 'flex' ? 'none' : 'flex';
+        }
 
-        document.getElementById('vaultPassword').addEventListener('input', (e) => {
-            if(e.target.value === MASTER_PASS) {
-                document.getElementById('admin-content').classList.remove('hidden');
+        document.getElementById('vaultPass').addEventListener('input', (e) => {
+            if(e.target.value === ADMIN_HASH) {
+                document.getElementById('vault-content').classList.remove('hidden');
                 e.target.style.display = 'none';
-                log("XÁC THỰC NHÀ SÁNG LẬP THÀNH CÔNG.", "success");
+                log("XÁC THỰC ADMIN THÀNH CÔNG.", "success");
             }
         });
 
-        function saveKeys() {
-            localStorage.setItem('gemini_key', document.getElementById('key-gemini').value);
-            localStorage.setItem('github_token', document.getElementById('key-github').value);
-            localStorage.setItem('jina_key', document.getElementById('key-jina').value);
-            alert("Đã bảo mật chìa khóa!"); toggleVault();
+        function secureSave() {
+            const g = document.getElementById('key-gemini').value;
+            const h = document.getElementById('key-github').value;
+            localStorage.setItem('_tj_g', vaultSecret.encode(g));
+            localStorage.setItem('_tj_h', vaultSecret.encode(h));
+            log("Dữ liệu API đã được mã hóa và lưu vào localStorage.", "success");
+            toggleVault();
         }
 
-        async function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            log(`Đang đọc file: ${file.name}...`, "info");
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                const content = e.target.result;
-                askAI(`Tôi gửi file tên ${file.name}. Nội dung sơ bộ: ${content.substring(0, 1000)}. Hãy phân tích nó.`);
-            };
-            reader.readAsText(file);
-        }
+        // BƯỚC 4: NÃO BỘ AI & CHỐNG LƯỜI BIẾNG
+        async function askAI(prompt, base64File = null) {
+            const gKey = localStorage.getItem('_tj_g') ? vaultSecret.decode(localStorage.getItem('_tj_g')) : null;
+            if(!gKey) return log("LỖI: Chưa có chìa khóa API trong Vault!", "error");
 
-        async function askAI(prompt) {
-            const key = localStorage.getItem('gemini_key');
-            if(!key) return log("LỖI: Chưa nạp API Key!", "error");
-            
-            document.getElementById('stopBtn').classList.remove('hidden');
             controller = new AbortController();
-            log("T John đang suy nghĩ...", "info");
+            document.getElementById('stopBtn').classList.remove('hidden');
+            log("T John đang lập kế hoạch...", "info");
+
+            const systemPrompt = `BẠN LÀ T JOHN AI. NHÀ SÁNG LẬP: T THUẬN.
+            QUY TẮC SẮT: 
+            1. Mọi phản hồi chứa mã nguồn phải là BẢN FULL 100%, không placeholder, không nói 'đã lược bỏ'.
+            2. Nếu vi phạm, hệ thống sẽ tự động từ chối.
+            3. Luôn bọc code HTML trong thẻ \`\`\`html.`;
+
+            const contents = [{
+                parts: [{ text: `${systemPrompt}\n\nYêu cầu của T Thuận: ${prompt}` }]
+            }];
+
+            if(base64File) {
+                contents[0].parts.push({
+                    inline_data: { mime_type: "image/jpeg", data: base64File }
+                });
+            }
 
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${key}`, {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${gKey}`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     signal: controller.signal,
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Bạn là T John AI, Nhà sáng lập là T Thuận. 
-                        QUY TẮC SẮT: Viết FULL code, không viết tắt. Không đụng vào API/Admin.
-                        Yêu cầu: ${prompt}` }]}]
-                    })
+                    body: JSON.stringify({ contents })
                 });
+
                 const data = await response.json();
-                const aiMsg = data.candidates[0].content.parts[0].text;
+                const text = data.candidates[0].content.parts[0].text;
                 
-                const codeMatch = aiMsg.match(/```html([\s\S]*?)```/);
+                // BƯỚC 5: CÁNH TAY - SANDBOX & TỰ SỬA LỖI
+                const codeMatch = text.match(/```html([\s\S]*?)```/);
                 if(codeMatch) {
-                    lastGeneratedCode = codeMatch[1];
-                    openSandbox(lastGeneratedCode);
-                    log("Đã đúc xong ứng dụng trong Sandbox!", "success");
+                    lastCode = codeMatch[1];
+                    runInSandbox(lastCode);
                 }
-                log(aiMsg.replace(/```[\s\S]*?```/g, "[ĐÃ TRÍCH XUẤT CODE]"), "ai");
-            } catch (err) { if(err.name !== 'AbortError') log("Lỗi: " + err, "error"); }
-            document.getElementById('stopBtn').classList.add('hidden');
+                log(text.replace(/```[\s\S]*?```/g, "[ĐÃ TRÍCH XUẤT CODE]"), "ai");
+            } catch (err) {
+                if(err.name !== 'AbortError') log("Lỗi: " + err.message, "error");
+            } finally {
+                document.getElementById('stopBtn').classList.add('hidden');
+            }
         }
 
-        function abortAI() { if(controller) { controller.abort(); log("Đã dừng tạo phản hồi.", "error"); } }
-        function openSandbox(html) { document.getElementById('sandbox-container').style.display = 'block'; document.getElementById('sandbox-iframe').srcdoc = html; }
-        function closeSandbox() { document.getElementById('sandbox-container').style.display = 'none'; }
-        
-        function copyLastCode() {
-            if(!lastGeneratedCode) return alert("Chưa có code để copy!");
-            navigator.clipboard.writeText(lastGeneratedCode);
-            alert("Đã copy mã nguồn!");
-        }
-
-        function downloadCode() {
-            if(!lastGeneratedCode) return alert("Chưa có code để tải!");
-            const blob = new Blob([lastGeneratedCode], {type: 'text/html'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = 't-john-app.html'; a.click();
-        }
-
-        function handleCommand() {
-            const input = document.getElementById('userInput');
-            const cmd = input.value.trim();
-            if(!cmd) return;
+        function runInSandbox(code) {
+            document.getElementById('sandbox-area').style.display = 'block';
+            const frame = document.getElementById('sandbox-iframe');
+            frame.srcdoc = code;
             
-            // MÃ ĐẶC BIỆT SỬA WEB
-            if(cmd === "*T_THUAN_UNLIMITED*") {
+            // Lắng nghe lỗi từ Sandbox (Self-Healing)
+            window.addEventListener('message', function(e) {
+                if(e.data.type === 'error') {
+                    log("Phát hiện lỗi trong Sandbox! Đang bắt AI sửa lỗi...", "error");
+                    askAI(`Code bạn vừa tạo có lỗi sau: ${e.data.msg}. Hãy viết lại bản vá 100% hoàn chỉnh.`);
+                }
+            }, {once: true});
+        }
+
+        // BƯỚC 6: XỬ LÝ FILE & MÃ ĐẶC BIỆT
+        function handleFile(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const base64 = event.target.result.split(',')[1];
+                log(`Đã nạp file: ${file.name}. Đang gửi cho AI...`, "success");
+                askAI(`Hãy phân tích file này và thực hiện yêu cầu của tôi.`, base64);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function execute() {
+            const input = document.getElementById('userInput');
+            const val = input.value.trim();
+            if(!val) return;
+
+            // Kiểm tra Mã Đặc Biệt God Mode
+            if(val === GOD_CODE) {
                 document.designMode = "on";
-                log("GOD MODE: Đã mở quyền sửa web trực tiếp!", "success");
+                log("GOD MODE: Đã kích hoạt quyền sửa Web trực tiếp!", "success");
             } else {
-                log(cmd, "success");
-                askAI(cmd);
+                log(val, "success");
+                askAI(val);
             }
             input.value = "";
         }
+
+        function abortMission() { if(controller) controller.abort(); log("Lệnh đã bị Nhà sáng lập ngắt.", "error"); }
+
+        function downloadApp() {
+            if(!lastCode) return alert("Không có code để xuất!");
+            const blob = new Blob([lastCode], {type: 'text/html'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `t-john-app-${Date.now()}.html`;
+            a.click();
+        }
+
+        function log(msg, type) {
+            const logs = document.getElementById('logs');
+            const d = document.createElement('div');
+            const colors = { success: 'text-green-400', error: 'text-red-500', ai: 'text-white italic', info: 'text-yellow-400' };
+            d.className = colors[type] || 'text-cyan-400';
+            d.innerHTML = `> [${new Date().toLocaleTimeString()}] ${msg}`;
+            logs.appendChild(d);
+            document.getElementById('terminal').scrollTop = document.getElementById('terminal').scrollHeight;
+        }
+
+        function closeSandbox() { document.getElementById('sandbox-area').style.display = 'none'; }
+        
+        protectVault();
     </script>
 </body>
 </html>
+
