@@ -3,73 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T JOHN AI | CORE V10</title>
+    <title>T JOHN AI | CORE V11</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+
     <style>
-        :root { --neon: #00f2ff; }
-        body { background: #000; color: var(--neon); font-family: 'Courier New', monospace; height: 100vh; margin: 0; overflow: hidden; }
-        .glass { background: rgba(10, 10, 10, 0.9); border: 1px solid rgba(0, 242, 255, 0.2); backdrop-filter: blur(10px); }
-        .log-entry { border-left: 2px solid var(--neon); padding-left: 10px; margin-bottom: 8px; font-size: 11px; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateX(-5px); } to { opacity: 1; transform: translateX(0); } }
-        #vault { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; align-items: center; justify-content: center; }
+        :root { --neon: #00f2ff; --bg: #050505; }
+        body { 
+            background: var(--bg) url('https://raw.githubusercontent.com/Thuan101/T-John-Ai/main/1000181678.jpg') no-repeat center center fixed; 
+            background-size: cover; color: var(--neon); font-family: 'Courier New', monospace; 
+            height: 100vh; margin: 0; overflow: hidden; display: flex; flex-direction: column;
+        }
+        .neon-glow { text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon); }
+        .glass { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px); border: 1px solid rgba(0, 242, 255, 0.2); }
+        .log-entry { border-left: 2px solid var(--neon); padding: 5px 10px; margin-bottom: 10px; font-size: 11px; background: rgba(255,255,255,0.03); }
+        #vault { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; p: 4; }
     </style>
 </head>
-<body class="flex flex-col p-2">
+<body>
 
-    <header class="text-center py-2 border-b border-cyan-900/50">
-        <h1 class="text-2xl font-black italic tracking-tighter">T JOHN <span class="text-white">V10</span></h1>
-        <p class="text-[8px] opacity-50 uppercase">Hệ Thống Tự Tiến Hóa | Founder: T Thuận</p>
+    <header class="text-center py-4 shrink-0">
+        <h1 class="text-3xl font-black italic neon-glow uppercase">T JOHN V11</h1>
+        <div class="text-[9px] tracking-[0.4em] text-cyan-300 font-bold">POWERED BY GOOGLE SDK | FOUNDER: T THUẬN</div>
     </header>
 
-    <div id="terminal" class="flex-grow overflow-y-auto my-4 p-2 custom-scroll">
-        <div id="logs">
-            <div class="log-entry text-cyan-400 font-bold">[HỆ THỐNG]: Core V10 đã trực tuyến.</div>
-            <div class="log-entry text-white/50">[T JOHN]: Đang đợi lệnh từ Nhà sáng lập...</div>
+    <main class="flex-grow overflow-hidden px-4 relative">
+        <div id="terminal" class="h-full overflow-y-auto p-2 custom-scroll">
+            <div id="logs">
+                <div class="log-entry text-white/40">[HỆ THỐNG]: Đã tích hợp Động cơ SDK chính hãng.</div>
+                <div class="log-entry text-cyan-400 font-bold">[T JOHN]: Đã sẵn sàng thi hành lệnh, thưa Nhà sáng lập.</div>
+            </div>
         </div>
-    </div>
+    </main>
 
-    <div class="glass rounded-2xl p-3 space-y-3">
-        <div class="flex gap-2">
+    <footer class="p-4 glass shrink-0 border-t border-cyan-900/50">
+        <div class="flex gap-2 max-w-4xl mx-auto mb-3 justify-center">
+            <button onclick="window.copyCode()" class="text-[10px] border border-cyan-500 px-3 py-1 rounded">COPY CODE</button>
+            <button onclick="window.downloadApp()" class="text-[10px] border border-cyan-500 px-3 py-1 rounded">TẢI APP</button>
+        </div>
+        <div class="flex gap-2 max-w-4xl mx-auto">
             <input type="text" id="userInput" placeholder="Nhập lệnh điều hành..." 
-                class="flex-grow bg-black/50 border border-cyan-900 p-3 rounded-xl text-white outline-none focus:border-cyan-400 text-sm">
-            <button onclick="execute()" class="bg-cyan-500 text-black px-5 rounded-xl font-bold active:scale-90 transition-all">GỬI</button>
-            <button onclick="toggleVault()" class="px-3 rounded-xl border border-cyan-900 text-lg">⚙️</button>
+                class="flex-grow bg-black/60 border border-cyan-900 p-4 rounded-2xl text-white outline-none focus:border-cyan-400 text-sm">
+            <button id="sendBtn" class="bg-cyan-500 text-black px-6 rounded-2xl font-black">GỬI</button>
+            <button onclick="window.toggleVault()" class="px-4 rounded-2xl border border-cyan-900 bg-black/40 text-xl">⚙️</button>
         </div>
-        <div class="flex justify-between px-1">
-            <button onclick="copyCode()" class="text-[10px] text-cyan-500 underline uppercase">Copy Code</button>
-            <button id="status-indicator" class="text-[8px] text-green-500 font-bold uppercase italic tracking-widest">Hệ thống: Sẵn sàng</button>
-        </div>
-    </div>
+    </footer>
 
     <div id="vault">
-        <div class="w-full max-w-xs glass p-6 rounded-3xl border-2 border-cyan-400 shadow-[0_0_30px_rgba(0,242,255,0.2)]">
-            <h2 class="text-center font-bold mb-4">TRUNG TÂM CHÌA KHÓA</h2>
-            <div class="space-y-4">
-                <input type="text" id="key-gemini" placeholder="Dán Gemini API Key..." class="w-full bg-zinc-900 p-3 rounded-xl text-yellow-400 text-xs border border-zinc-800">
-                <input type="text" id="key-github" placeholder="GitHub Token (Nếu có)..." class="w-full bg-zinc-900 p-3 rounded-xl text-yellow-400 text-xs border border-zinc-800">
-                <button onclick="saveVault()" class="w-full bg-cyan-600 py-3 rounded-xl font-bold text-black uppercase">LƯU CẤU HÌNH</button>
+        <div class="w-full max-w-sm glass p-8 rounded-3xl border-2 border-cyan-400">
+            <h2 class="text-xl font-bold mb-6 text-center neon-glow">BỘ GIẢI MÃ KEY</h2>
+            <div class="space-y-5">
+                <div>
+                    <label class="text-[10px] uppercase font-bold text-cyan-500 ml-1">Gemini API Key</label>
+                    <input type="text" id="key-gemini" class="w-full bg-zinc-900 p-3 rounded-xl text-yellow-400 text-xs border border-zinc-800">
+                </div>
+                <div>
+                    <label class="text-[10px] uppercase font-bold text-gray-500 ml-1">GitHub Token</label>
+                    <input type="text" id="key-github" class="w-full bg-zinc-900 p-3 rounded-xl text-yellow-400 text-xs border border-zinc-800">
+                </div>
+                <button onclick="window.saveVault()" class="w-full bg-cyan-600 py-4 rounded-xl font-black text-black uppercase shadow-lg">LƯU & KÍCH HOẠT SDK</button>
             </div>
-            <button onclick="toggleVault()" class="w-full mt-4 text-[10px] opacity-40 uppercase">Thoát</button>
+            <button onclick="window.toggleVault()" class="w-full mt-6 text-[10px] opacity-40 uppercase underline">Đóng</button>
         </div>
     </div>
 
-    <script>
-        let lastCode = "";
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+
+        window.lastCode = "";
+
+        // Tự động nạp Key khi mở trang
         window.onload = () => {
             document.getElementById('key-gemini').value = localStorage.getItem('gemini_key') || "";
             document.getElementById('key-github').value = localStorage.getItem('github_key') || "";
         };
 
-        function toggleVault() { document.getElementById('vault').style.display = (document.getElementById('vault').style.display === 'flex') ? 'none' : 'flex'; }
+        window.toggleVault = () => {
+            const v = document.getElementById('vault');
+            v.style.display = (v.style.display === 'flex') ? 'none' : 'flex';
+        };
 
-        function saveVault() {
+        window.saveVault = () => {
             localStorage.setItem('gemini_key', document.getElementById('key-gemini').value.trim());
             localStorage.setItem('github_key', document.getElementById('key-github').value.trim());
-            alert("HỆ THỐNG: Đã ghi nhớ chìa khóa mới!");
+            alert("SDK: Đã xác nhận chìa khóa!");
             location.reload();
+        };
+
+        async function startAI() {
+            const input = document.getElementById('userInput');
+            const prompt = input.value;
+            if(!prompt) return;
+
+            window.log(prompt, "success");
+            input.value = "";
+
+            const apiKey = localStorage.getItem('gemini_key');
+            if(!apiKey) return window.log("LỖI: Chưa nạp API Key vào hệ thống ⚙️!", "error");
+
+            window.log("Đang kích hoạt SDK kết nối Google...", "info");
+
+            try {
+                const genAI = new GoogleGenerativeAI(apiKey);
+                // Dùng Flash để nhanh và ổn định nhất cho bản Free
+                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+                const result = await model.generateContent(`Founder: T Thuận. Bạn là T John AI. Luôn trả về code HTML/JS đầy đủ trong block mã. Yêu cầu: ${prompt}`);
+                const response = await result.response;
+                const text = response.text();
+
+                const match = text.match(/```html([\s\S]*?)```/);
+                if(match) window.lastCode = match[1];
+
+                window.log(text.replace(/```[\s\S]*?```/g, "[MÃ NGUỒN ĐÃ XỬ LÝ]"), "ai");
+            } catch (err) {
+                window.log("SỰ CỐ SDK: " + err.message, "error");
+                window.log("Gợi ý: Hãy kiểm tra Key hoặc đổi sang mạng 4G/Wi-Fi khác.", "info");
+            }
         }
 
-        function log(msg, type) {
+        window.log = (msg, type) => {
             const logs = document.getElementById('logs');
             const div = document.createElement('div');
             const colors = { error: 'text-red-500 font-bold', success: 'text-green-400', info: 'text-cyan-400', ai: 'text-white italic' };
@@ -77,55 +137,27 @@
             div.innerHTML = `> ${msg}`;
             logs.appendChild(div);
             document.getElementById('terminal').scrollTop = document.getElementById('terminal').scrollHeight;
-        }
+        };
 
-        async function askAI(prompt) {
-            const key = localStorage.getItem('gemini_key');
-            if(!key) return log("LỖI: Chưa nạp Gemini Key trong phần cài đặt ⚙️!", "error");
-            
-            document.getElementById('status-indicator').innerText = "Hệ thống: Đang suy nghĩ...";
-            log("T John đang xử lý lệnh...", "info");
-
-            try {
-                // SỬ DỤNG ENDPOINT CHUẨN NHẤT CỦA GOOGLE
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
-                
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Nhà sáng lập: T Thuận. Bạn là T John AI. Luôn viết code HTML/CSS/JS đầy đủ trong block mã. Yêu cầu: ${prompt}` }]}]
-                    })
-                });
-
-                const data = await response.json();
-                
-                // KIỂM TRA PHẢN HỒI CHẶT CHẼ
-                if (data.error) throw new Error(data.error.message);
-                if (!data.candidates || data.candidates.length === 0) throw new Error("Google không trả về kết quả.");
-
-                const text = data.candidates[0].content.parts[0].text;
-                const match = text.match(/```html([\s\S]*?)```/);
-                if(match) lastCode = match[1];
-
-                log(text.replace(/```[\s\S]*?```/g, "[MÃ NGUỒN ĐÃ TRÍCH XUẤT]"), "ai");
-                document.getElementById('status-indicator').innerText = "Hệ thống: Sẵn sàng";
-
-            } catch (err) {
-                log("SỰ CỐ KẾT NỐI: " + err.message, "error");
-                document.getElementById('status-indicator').innerText = "Hệ thống: Lỗi";
+        window.copyCode = () => {
+            if(window.lastCode) { 
+                navigator.clipboard.writeText(window.lastCode); 
+                alert("Đã copy mã nguồn!"); 
             }
-        }
+        };
 
-        function execute() {
-            const input = document.getElementById('userInput');
-            if(!input.value) return;
-            log(input.value, "success");
-            askAI(input.value);
-            input.value = "";
-        }
+        window.downloadApp = () => {
+            if(window.lastCode) {
+                const blob = new Blob([window.lastCode], {type: 'text/html'});
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `T-JOHN-APP.html`;
+                a.click();
+            }
+        };
 
-        function copyCode() { if(lastCode) { navigator.clipboard.writeText(lastCode); alert("Đã copy mã nguồn!"); } else { alert("Chưa có mã nguồn để copy."); } }
+        document.getElementById('sendBtn').onclick = startAI;
     </script>
 </body>
 </html>
+
