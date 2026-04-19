@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T JOHN AI | CORE V12.1</title>
+    <title>T JOHN AI | CORE V12.2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="importmap">
       {
@@ -20,60 +20,58 @@
             height: 100vh; margin: 0; overflow: hidden; display: flex; flex-direction: column;
         }
         .neon-glow { text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon); }
-        .glass { background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px); border: 1px solid rgba(0, 242, 255, 0.3); }
-        .log-entry { border-left: 2px solid var(--neon); padding: 5px 10px; margin-bottom: 10px; font-size: 11px; background: rgba(255,255,255,0.03); border-radius: 0 8px 8px 0; }
+        .glass { background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(15px); border: 1px solid rgba(0, 242, 255, 0.3); }
+        .log-entry { border-left: 2px solid var(--neon); padding: 5px 10px; margin-bottom: 8px; font-size: 11px; background: rgba(255,255,255,0.03); }
         #vault { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; padding: 15px; }
-        .custom-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: var(--neon); border-radius: 10px; }
     </style>
 </head>
 <body>
 
     <header class="text-center py-4 shrink-0">
-        <h1 class="text-3xl font-black italic neon-glow uppercase">T JOHN V12.1</h1>
-        <div class="text-[9px] tracking-[0.4em] text-cyan-300 font-bold uppercase">Hệ Thống Tự Khắc Phục Lỗi | Founder: T Thuận</div>
+        <h1 class="text-3xl font-black italic neon-glow uppercase">T JOHN V12.2</h1>
+        <div class="text-[9px] tracking-[0.4em] text-cyan-300 font-bold uppercase">FOUNDER: T THUẬN | STABLE EDITION</div>
     </header>
 
     <main class="flex-grow overflow-hidden px-4">
-        <div id="terminal" class="h-full overflow-y-auto p-2 custom-scroll">
+        <div id="terminal" class="h-full overflow-y-auto p-2 scroll-smooth">
             <div id="logs">
-                <div class="log-entry text-white/40">[HỆ THỐNG]: Đã kích hoạt V12.1 - Fix v1beta Error.</div>
-                <div class="log-entry text-cyan-400 font-bold">[T JOHN]: Sẵn sàng. Nhà sáng lập hãy kiểm tra 3 Key trong ⚙️.</div>
+                <div class="log-entry text-white/40">[HỆ THỐNG]: Đã tối ưu hóa kết nối cho Free Tier Key.</div>
+                <div class="log-entry text-cyan-400 font-bold">[T JOHN]: Sẵn sàng. Nếu vẫn lỗi 404, hãy kiểm tra Key trong ⚙️.</div>
             </div>
         </div>
     </main>
 
     <footer class="p-4 glass shrink-0 border-t border-cyan-900/50">
         <div class="flex gap-4 max-w-4xl mx-auto mb-3 justify-center">
-            <button onclick="window.copyCode()" class="text-[10px] uppercase font-bold text-cyan-500 hover:text-white transition-all">Copy Code</button>
-            <button onclick="window.downloadApp()" class="text-[10px] uppercase font-bold text-cyan-500 hover:text-white transition-all">Tải App</button>
+            <button onclick="window.copyCode()" class="text-[10px] uppercase font-bold text-cyan-500">Copy Code</button>
+            <button onclick="window.downloadApp()" class="text-[10px] uppercase font-bold text-cyan-500">Tải App</button>
         </div>
         <div class="flex gap-2 max-w-4xl mx-auto">
-            <input type="text" id="userInput" placeholder="Nhập lệnh điều hành..." class="flex-grow bg-black/60 border border-cyan-900 p-4 rounded-2xl text-white outline-none focus:border-cyan-400">
-            <button id="sendBtn" class="bg-cyan-500 text-black px-6 rounded-2xl font-black hover:bg-white active:scale-95 transition-all">GỬI</button>
-            <button onclick="window.toggleVault()" class="px-4 rounded-2xl border border-cyan-900 bg-black/40 text-xl hover:border-cyan-400">⚙️</button>
+            <input type="text" id="userInput" placeholder="Nhập lệnh..." class="flex-grow bg-black/60 border border-cyan-900 p-4 rounded-2xl text-white outline-none focus:border-cyan-400">
+            <button id="sendBtn" class="bg-cyan-500 text-black px-6 rounded-2xl font-black">GỬI</button>
+            <button onclick="window.toggleVault()" class="px-4 rounded-2xl border border-cyan-900 bg-black/40 text-xl">⚙️</button>
         </div>
     </footer>
 
     <div id="vault">
-        <div class="w-full max-w-sm glass p-8 rounded-3xl border-2 border-cyan-400 shadow-[0_0_50px_rgba(0,242,255,0.2)]">
-            <h2 class="text-xl font-bold mb-6 text-center neon-glow uppercase italic">Trung Tâm Chìa Khóa</h2>
+        <div class="w-full max-w-sm glass p-8 rounded-3xl border-2 border-cyan-400">
+            <h2 class="text-xl font-bold mb-6 text-center neon-glow uppercase italic">Cấu Hình API</h2>
             <div class="space-y-4">
                 <div>
-                    <label class="text-[10px] uppercase font-bold text-cyan-500 ml-1">1. Gemini API Key (Bắt buộc)</label>
-                    <input type="text" id="key-gemini" placeholder="Dán Gemini Key..." class="w-full bg-zinc-900 p-3 rounded-xl text-yellow-400 text-xs border border-zinc-800 outline-none focus:border-cyan-500">
+                    <label class="text-[10px] uppercase font-bold text-cyan-500 ml-1">1. Gemini Key</label>
+                    <input type="text" id="key-gemini" placeholder="Dán Key mới vào đây..." class="w-full bg-zinc-900 p-3 rounded-xl text-yellow-400 text-xs border border-zinc-800 outline-none">
                 </div>
                 <div>
-                    <label class="text-[10px] uppercase font-bold text-yellow-500 ml-1">2. Jina Reader API Key</label>
-                    <input type="text" id="key-jina" placeholder="Dán Jina Key..." class="w-full bg-zinc-900 p-3 rounded-xl text-yellow-400 text-xs border border-zinc-800 outline-none focus:border-cyan-500">
+                    <label class="text-[10px] uppercase font-bold text-yellow-500 ml-1">2. Jina Key</label>
+                    <input type="text" id="key-jina" class="w-full bg-zinc-900 p-3 rounded-xl text-yellow-400 text-xs border border-zinc-800 outline-none">
                 </div>
                 <div>
-                    <label class="text-[10px] uppercase font-bold text-gray-500 ml-1">3. GitHub Token (ghp_...)</label>
-                    <input type="text" id="key-github" placeholder="Dán GitHub Token..." class="w-full bg-zinc-900 p-3 rounded-xl text-yellow-400 text-xs border border-zinc-800 outline-none focus:border-cyan-500">
+                    <label class="text-[10px] uppercase font-bold text-gray-500 ml-1">3. GitHub Token</label>
+                    <input type="text" id="key-github" class="w-full bg-zinc-900 p-3 rounded-xl text-yellow-400 text-xs border border-zinc-800 outline-none">
                 </div>
-                <button onclick="window.saveVault()" class="w-full bg-cyan-600 py-4 rounded-xl font-black text-black uppercase mt-4 active:scale-95 transition-all">LƯU & ĐỒNG BỘ HÓA</button>
+                <button onclick="window.saveVault()" class="w-full bg-cyan-600 py-4 rounded-xl font-black text-black uppercase mt-4">KÍCH HOẠT HỆ THỐNG</button>
             </div>
-            <button onclick="window.toggleVault()" class="w-full mt-6 text-[10px] opacity-40 uppercase underline">Đóng bảng điều khiển</button>
+            <button onclick="window.toggleVault()" class="w-full mt-6 text-[10px] opacity-40 uppercase underline text-center block">Đóng</button>
         </div>
     </div>
 
@@ -97,52 +95,47 @@
             localStorage.setItem('gemini_key', document.getElementById('key-gemini').value.trim());
             localStorage.setItem('jina_key', document.getElementById('key-jina').value.trim());
             localStorage.setItem('github_key', document.getElementById('key-github').value.trim());
-            alert("Đã lưu cấu hình mới!");
+            alert("Đã đồng bộ Key mới!");
             location.reload();
         };
 
         async function startAI() {
             const input = document.getElementById('userInput');
-            const prompt = input.value;
+            const prompt = input.value.trim();
             if(!prompt) return;
 
             window.log(prompt, "success");
             input.value = "";
 
             const apiKey = localStorage.getItem('gemini_key');
-            if(!apiKey) return window.log("LỖI: Thiếu Gemini Key trong cài đặt ⚙️!", "error");
+            if(!apiKey) return window.log("LỖI: Chưa có Key. Hãy nhấn ⚙️", "error");
 
-            window.log("Đang thiết lập kênh truyền tin bảo mật...", "info");
-
-            // ƯU TIÊN GỌI QUA PHIÊN BẢN V1 ỔN ĐỊNH
-            const modelNames = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"];
+            // Danh sách model ưu tiên cho Free Tier
+            const models = ["gemini-1.5-flash", "gemini-1.5-pro"];
             let success = false;
 
-            for (let name of modelNames) {
+            for (let modelName of models) {
                 if (success) break;
                 try {
-                    window.log(`Đang kết nối cổng: ${name}...`, "info");
+                    window.log(`Đang thử kết nối cổng: ${modelName}...`, "info");
                     const genAI = new GoogleGenerativeAI(apiKey);
-                    
-                    // FIX LỖI 404: Ép buộc sử dụng phiên bản API v1 thay vì v1beta
-                    const model = genAI.getGenerativeModel({ 
-                        model: name,
-                    }, { apiVersion: 'v1' }); 
+                    // Không ép buộc version để SDK tự nhận diện bản tốt nhất
+                    const model = genAI.getGenerativeModel({ model: modelName });
 
-                    const result = await model.generateContent(`Founder: T Thuận. Bạn là T John AI. Luôn trả về code HTML/CSS/JS nằm trong block mã. Yêu cầu: ${prompt}`);
+                    const result = await model.generateContent(`Bạn là T John AI. Luôn viết code trong block mã. Yêu cầu: ${prompt}`);
                     const response = await result.response;
                     const text = response.text();
 
-                    const match = text.match(/```html([\s\S]*?)```/);
-                    if(match) window.lastCode = match[1];
-
-                    window.log(text.replace(/```[\s\S]*?```/g, "[MÃ NGUỒN ĐÃ TRÍCH XUẤT]"), "ai");
-                    success = true; 
+                    if(text) {
+                        const match = text.match(/```html([\s\S]*?)```/);
+                        if(match) window.lastCode = match[1];
+                        window.log(text.replace(/```[\s\S]*?```/g, "[MÃ NGUỒN]"), "ai");
+                        success = true;
+                    }
                 } catch (err) {
-                    window.log(`Cổng ${name} chưa phản hồi. Đang chuyển...`, "error");
-                    if (name === modelNames[modelNames.length - 1]) {
-                        window.log("SỰ CỐ HỆ THỐNG: " + err.message, "error");
-                        window.log("Gợi ý: Hãy thử đổi sang 4G hoặc kiểm tra lại Key.", "info");
+                    window.log(`Cổng ${modelName} từ chối kết nối.`, "error");
+                    if (modelName === models[models.length-1]) {
+                        window.log("LỖI CUỐI: Google từ chối tất cả model. Hãy thử tạo Key mới!", "error");
                     }
                 }
             }
@@ -151,7 +144,7 @@
         window.log = (msg, type) => {
             const logs = document.getElementById('logs');
             const div = document.createElement('div');
-            const colors = { error: 'text-red-500 font-bold', success: 'text-green-400', info: 'text-cyan-400/60', ai: 'text-white italic' };
+            const colors = { error: 'text-red-500', success: 'text-green-400', info: 'text-cyan-400/60', ai: 'text-white italic' };
             div.className = `log-entry ${colors[type] || ''}`;
             div.innerHTML = `> ${msg}`;
             logs.appendChild(div);
