@@ -3,68 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T JOHN AI | CORE V9</title>
+    <title>T JOHN AI | CORE V10</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root { --neon: #00f2ff; }
-        body { 
-            background: #000 url('https://raw.githubusercontent.com/Thuan101/T-John-Ai/main/1000181678.jpg') no-repeat center center fixed; 
-            background-size: cover; color: var(--neon); font-family: 'Courier New', monospace; 
-            overflow: hidden; height: 100vh; margin: 0; 
-        }
-        .neon-glow { text-shadow: 0 0 15px var(--neon); }
-        .glass { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px); border: 1px solid rgba(0, 242, 255, 0.3); }
-        #vault { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; align-items: center; justify-content: center; padding: 15px; }
-        .vault-box { width: 100%; max-width: 450px; padding: 25px; border-radius: 20px; border: 2px solid var(--neon); }
+        body { background: #000; color: var(--neon); font-family: 'Courier New', monospace; height: 100vh; margin: 0; overflow: hidden; }
+        .glass { background: rgba(10, 10, 10, 0.9); border: 1px solid rgba(0, 242, 255, 0.2); backdrop-filter: blur(10px); }
+        .log-entry { border-left: 2px solid var(--neon); padding-left: 10px; margin-bottom: 8px; font-size: 11px; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(-5px); } to { opacity: 1; transform: translateX(0); } }
+        #vault { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; align-items: center; justify-content: center; }
     </style>
 </head>
-<body class="flex flex-col">
+<body class="flex flex-col p-2">
 
-    <header class="text-center py-4">
-        <h1 class="text-4xl font-black italic neon-glow uppercase">T JOHN AI</h1>
-        <div class="text-[10px] tracking-[0.3em] text-cyan-400 font-bold uppercase">Founder: T Thuận</div>
+    <header class="text-center py-2 border-b border-cyan-900/50">
+        <h1 class="text-2xl font-black italic tracking-tighter">T JOHN <span class="text-white">V10</span></h1>
+        <p class="text-[8px] opacity-50 uppercase">Hệ Thống Tự Tiến Hóa | Founder: T Thuận</p>
     </header>
 
-    <main class="flex-grow px-4 pb-48 overflow-hidden">
-        <div id="terminal" class="h-full glass p-4 rounded-2xl overflow-y-auto text-[11px] leading-relaxed">
-            <div id="logs" class="space-y-2">
-                <div class="text-white/40">[HỆ THỐNG]: Đã kích hoạt cơ chế Auto-Fallback API...</div>
-                <div class="text-cyan-400 font-bold">[T JOHN]: Đang chờ lệnh từ Nhà sáng lập.</div>
-            </div>
+    <div id="terminal" class="flex-grow overflow-y-auto my-4 p-2 custom-scroll">
+        <div id="logs">
+            <div class="log-entry text-cyan-400 font-bold">[HỆ THỐNG]: Core V10 đã trực tuyến.</div>
+            <div class="log-entry text-white/50">[T JOHN]: Đang đợi lệnh từ Nhà sáng lập...</div>
         </div>
-    </main>
+    </div>
 
-    <section class="fixed bottom-0 left-0 w-full glass p-4 border-t border-cyan-500/30 z-20">
-        <div class="flex gap-2 justify-center mb-4">
-            <button onclick="copyCode()" class="px-3 py-1 border border-cyan-500 text-[10px]">COPY CODE</button>
-            <button onclick="downloadApp()" class="px-3 py-1 border border-cyan-500 text-[10px]">TẢI FILE</button>
+    <div class="glass rounded-2xl p-3 space-y-3">
+        <div class="flex gap-2">
+            <input type="text" id="userInput" placeholder="Nhập lệnh điều hành..." 
+                class="flex-grow bg-black/50 border border-cyan-900 p-3 rounded-xl text-white outline-none focus:border-cyan-400 text-sm">
+            <button onclick="execute()" class="bg-cyan-500 text-black px-5 rounded-xl font-bold active:scale-90 transition-all">GỬI</button>
+            <button onclick="toggleVault()" class="px-3 rounded-xl border border-cyan-900 text-lg">⚙️</button>
         </div>
-        <div class="flex gap-2 max-w-4xl mx-auto">
-            <input type="text" id="userInput" placeholder="Nhập lệnh..." class="flex-grow bg-black/60 border border-cyan-900 p-4 rounded-xl text-white outline-none">
-            <button onclick="execute()" class="bg-cyan-500 text-black px-6 rounded-xl font-bold">GỬI</button>
-            <button onclick="toggleVault()" class="px-4 rounded-xl border border-cyan-900 bg-black/40">🔐</button>
+        <div class="flex justify-between px-1">
+            <button onclick="copyCode()" class="text-[10px] text-cyan-500 underline uppercase">Copy Code</button>
+            <button id="status-indicator" class="text-[8px] text-green-500 font-bold uppercase italic tracking-widest">Hệ thống: Sẵn sàng</button>
         </div>
-    </section>
+    </div>
 
     <div id="vault">
-        <div class="vault-box glass shadow-2xl">
-            <h2 class="text-xl font-bold mb-6 italic text-center uppercase">Cấu Hình Chìa Khóa</h2>
+        <div class="w-full max-w-xs glass p-6 rounded-3xl border-2 border-cyan-400 shadow-[0_0_30px_rgba(0,242,255,0.2)]">
+            <h2 class="text-center font-bold mb-4">TRUNG TÂM CHÌA KHÓA</h2>
             <div class="space-y-4">
-                <div>
-                    <label class="text-[10px] text-cyan-500 font-bold uppercase">Gemini Key (Bắt buộc)</label>
-                    <input type="text" id="key-gemini" class="w-full bg-zinc-800 p-3 rounded text-yellow-400 text-[10px]">
-                </div>
-                <div>
-                    <label class="text-[10px] text-gray-500 font-bold uppercase">GitHub Token</label>
-                    <input type="text" id="key-github" class="w-full bg-zinc-800 p-3 rounded text-yellow-400 text-[10px]">
-                </div>
-                <div>
-                    <label class="text-[10px] text-gray-500 font-bold uppercase">Jina Reader Key</label>
-                    <input type="text" id="key-jina" class="w-full bg-zinc-800 p-3 rounded text-yellow-400 text-[10px]">
-                </div>
-                <button onclick="saveVault()" class="w-full bg-cyan-600 py-4 rounded font-bold text-black uppercase">LƯU & KHỞI ĐỘNG LẠI</button>
+                <input type="text" id="key-gemini" placeholder="Dán Gemini API Key..." class="w-full bg-zinc-900 p-3 rounded-xl text-yellow-400 text-xs border border-zinc-800">
+                <input type="text" id="key-github" placeholder="GitHub Token (Nếu có)..." class="w-full bg-zinc-900 p-3 rounded-xl text-yellow-400 text-xs border border-zinc-800">
+                <button onclick="saveVault()" class="w-full bg-cyan-600 py-3 rounded-xl font-bold text-black uppercase">LƯU CẤU HÌNH</button>
             </div>
-            <button onclick="toggleVault()" class="w-full mt-4 text-[10px] opacity-40">ĐÓNG</button>
+            <button onclick="toggleVault()" class="w-full mt-4 text-[10px] opacity-40 uppercase">Thoát</button>
         </div>
     </div>
 
@@ -73,59 +58,62 @@
         window.onload = () => {
             document.getElementById('key-gemini').value = localStorage.getItem('gemini_key') || "";
             document.getElementById('key-github').value = localStorage.getItem('github_key') || "";
-            document.getElementById('key-jina').value = localStorage.getItem('jina_key') || "";
         };
 
-        function toggleVault() {
-            const v = document.getElementById('vault');
-            v.style.display = (v.style.display === 'flex') ? 'none' : 'flex';
-        }
+        function toggleVault() { document.getElementById('vault').style.display = (document.getElementById('vault').style.display === 'flex') ? 'none' : 'flex'; }
 
         function saveVault() {
             localStorage.setItem('gemini_key', document.getElementById('key-gemini').value.trim());
             localStorage.setItem('github_key', document.getElementById('key-github').value.trim());
-            localStorage.setItem('jina_key', document.getElementById('key-jina').value.trim());
+            alert("HỆ THỐNG: Đã ghi nhớ chìa khóa mới!");
             location.reload();
         }
 
+        function log(msg, type) {
+            const logs = document.getElementById('logs');
+            const div = document.createElement('div');
+            const colors = { error: 'text-red-500 font-bold', success: 'text-green-400', info: 'text-cyan-400', ai: 'text-white italic' };
+            div.className = `log-entry ${colors[type] || ''}`;
+            div.innerHTML = `> ${msg}`;
+            logs.appendChild(div);
+            document.getElementById('terminal').scrollTop = document.getElementById('terminal').scrollHeight;
+        }
+
         async function askAI(prompt) {
-            const k = localStorage.getItem('gemini_key');
-            if(!k) return log("LỖI: Chưa có API Key!", "error");
+            const key = localStorage.getItem('gemini_key');
+            if(!key) return log("LỖI: Chưa nạp Gemini Key trong phần cài đặt ⚙️!", "error");
             
-            log("T John đang truy cập hệ thống...", "info");
-            
-            // THAY ĐỔI CHIẾN THUẬT: Thử bản v1 trước cho ổn định
-            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${k}`;
-            
+            document.getElementById('status-indicator').innerText = "Hệ thống: Đang suy nghĩ...";
+            log("T John đang xử lý lệnh...", "info");
+
             try {
+                // SỬ DỤNG ENDPOINT CHUẨN NHẤT CỦA GOOGLE
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+                
                 const response = await fetch(url, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Nhà sáng lập: T Thuận. Bạn là T John AI. Luôn viết code HTML/CSS/JS đầy đủ trong block mã. Yêu cầu: ${prompt}` }]}]
+                    })
                 });
 
                 const data = await response.json();
+                
+                // KIỂM TRA PHẢN HỒI CHẶT CHẼ
                 if (data.error) throw new Error(data.error.message);
+                if (!data.candidates || data.candidates.length === 0) throw new Error("Google không trả về kết quả.");
 
                 const text = data.candidates[0].content.parts[0].text;
                 const match = text.match(/```html([\s\S]*?)```/);
                 if(match) lastCode = match[1];
-                log(text.replace(/```[\s\S]*?```/g, "[MÃ NGUỒN]"), "ai");
-            } catch (e) {
-                log("THỬ LẠI VỚI FLASH...", "info");
-                // Nếu v1 lỗi, thử lại với Flash v1beta nhưng đường dẫn tối giản
-                try {
-                    const res2 = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${k}`, {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-                    });
-                    const data2 = await res2.json();
-                    const text2 = data2.candidates[0].content.parts[0].text;
-                    log(text2.replace(/```[\s\S]*?```/g, "[MÃ NGUỒN]"), "ai");
-                } catch(e2) {
-                    log("LỖI CUỐI CÙNG: " + e2.message, "error");
-                }
+
+                log(text.replace(/```[\s\S]*?```/g, "[MÃ NGUỒN ĐÃ TRÍCH XUẤT]"), "ai");
+                document.getElementById('status-indicator').innerText = "Hệ thống: Sẵn sàng";
+
+            } catch (err) {
+                log("SỰ CỐ KẾT NỐI: " + err.message, "error");
+                document.getElementById('status-indicator').innerText = "Hệ thống: Lỗi";
             }
         }
 
@@ -137,19 +125,7 @@
             input.value = "";
         }
 
-        function log(m, t) {
-            const logs = document.getElementById('logs');
-            const d = document.createElement('div');
-            const c = { success: 'text-green-400', error: 'text-red-500 font-bold', ai: 'text-white italic' };
-            d.className = `${c[t] || 'text-cyan-400'} border-l-2 border-current pl-3 py-1 mb-2`;
-            d.innerHTML = `> ${m}`;
-            logs.appendChild(d);
-            document.getElementById('terminal').scrollTop = document.getElementById('terminal').scrollHeight;
-        }
-
-        function copyCode() { if(lastCode) { navigator.clipboard.writeText(lastCode); alert("Đã copy!"); } }
-        function downloadApp() { if(lastCode) { const blob = new Blob([lastCode], {type: 'text/html'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `T-JOHN.html`; a.click(); } }
+        function copyCode() { if(lastCode) { navigator.clipboard.writeText(lastCode); alert("Đã copy mã nguồn!"); } else { alert("Chưa có mã nguồn để copy."); } }
     </script>
 </body>
 </html>
-
